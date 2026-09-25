@@ -31,7 +31,7 @@
   .muted { color: var(--muted); }
   .hidden { display: none !important; }
   .mark { display: inline-flex; flex-direction: column; line-height: 1; align-items: center; }
-  .mark img { height: 46px; width: auto; }
+  .mark img { height: 40px; width: auto; }
   .mark b { font: 600 22px "Cormorant Garamond", serif; letter-spacing: .3em; }
   .mark small { font-size: 9px; font-weight: 700; letter-spacing: .38em; margin-top: 4px; opacity: .7; }
   .login { min-height: 100vh; display: grid; place-items: center; padding: 16px; background: var(--ink); }
@@ -41,9 +41,10 @@
   header { position: sticky; top: 0; z-index: 10; background: var(--ink); color: var(--champagne); }
   header .btn-line { background: transparent; border-color: rgba(233,220,195,.3); color: var(--champagne); }
   .login .mark { background: var(--ink); color: var(--champagne); padding: 12px 20px; border-radius: 14px; }
-  .top { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 10px; }
+  .top { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 10px; }
   .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; }
-  .tab { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: #fff; font-weight: 600; font-size: 14px; white-space: nowrap; }
+  .tab { padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(233,220,195,.3); background: transparent; color: var(--champagne); font-weight: 600; font-size: 14px; white-space: nowrap; }
+  .tab:hover { border-color: var(--champagne); }
   .tab.on { background: var(--champagne); color: var(--ink); border-color: var(--champagne); }
   main { padding: 20px 0 60px; }
   .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
