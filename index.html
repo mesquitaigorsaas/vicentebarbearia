@@ -48,20 +48,20 @@
 
   /* Marca (enquanto o logo não chega) */
   .mark { display: inline-flex; flex-direction: column; line-height: 1; align-items: center; }
-  .mark img { height: 32px; width: auto; }
+  .mark img { height: 46px; width: auto; }
   .mark b { font: 600 26px "Cormorant Garamond", serif; letter-spacing: .32em; margin-right: -.32em; }
   .mark small { font-size: 9.5px; font-weight: 700; letter-spacing: .42em; margin-top: 5px; opacity: .75; }
 
   /* Header */
   header { position: fixed; inset: 0 0 auto; z-index: 50; color: var(--champagne); transition: background .3s, color .3s, box-shadow .3s; }
-  header.solid { background: rgba(251,248,242,.94); color: var(--ink); backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--line); }
+  header.solid { background: rgba(22,35,31,.94); color: var(--champagne); backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--line-dark); }
   .nav { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
   .menu { display: flex; align-items: center; gap: 30px; font-weight: 600; font-size: 14.5px; }
   .menu a:not(.btn) { position: relative; }
   .menu a:not(.btn)::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 1px; background: currentColor; transform: scaleX(0); transition: transform .25s; }
   .menu a:not(.btn):hover::after { transform: scaleX(1); }
   .menu .btn { height: 44px; padding: 0 22px; }
-  header:not(.solid) .menu .btn { background: var(--champagne); color: var(--ink); }
+  .menu .btn { background: var(--champagne); color: var(--ink); }
   .burger { display: none; width: 44px; height: 44px; border-radius: 12px; border: 1px solid currentColor; align-items: center; justify-content: center; opacity: .9; }
   .burger span, .burger span::before, .burger span::after { display: block; width: 18px; height: 1.5px; background: currentColor; position: relative; transition: .25s; }
   .burger span::before, .burger span::after { content: ""; position: absolute; left: 0; }
@@ -270,7 +270,7 @@
     .menu a:not(.btn) { padding: 15px 2px; border-bottom: 1px solid var(--line); }
     .menu .btn { margin-top: 14px; height: 52px; background: var(--leather) !important; color: #fff !important; }
     .burger { display: flex; }
-    header.open { background: var(--paper); color: var(--ink); }
+    header.open { background: var(--ink); color: var(--champagne); }
     .hero { padding: 116px 0 70px; }
     .hero-cta .btn { flex: 1 1 100%; }
     .float-card { left: 10px; bottom: 16px; }
@@ -292,7 +292,7 @@
 
 <header id="top-header">
   <div class="wrap nav">
-    <a href="#inicio" class="mark" aria-label="Vicente Barbearia — início"><img src="img/logo-vicente.png" alt="Vicente"><small>BARBEARIA · BURITIS</small></a>
+    <a href="#inicio" class="mark" aria-label="Vicente Barbearia — início"><img src="img/logo.png" alt="Vicente Barbearia"><small>BURITIS · BH</small></a>
     <nav class="menu" id="menu">
       <a href="#servicos">Serviços</a>
       <a href="#ambiente">Ambiente</a>
@@ -494,7 +494,7 @@
 <footer>
   <div class="wrap">
     <div class="foot">
-      <a href="#inicio" class="mark"><img src="img/logo-vicente.png" alt="Vicente"><small>BARBEARIA · BURITIS</small></a>
+      <a href="#inicio" class="mark"><img src="img/logo.png" alt="Vicente Barbearia"><small>BURITIS · BH</small></a>
       <nav><a href="#servicos">Serviços</a><a href="#agendar">Agendar</a><a href="#ambiente">Ambiente</a><a href="#local">Local</a><a href="admin.html">Área da equipe</a></nav>
     </div>
     <p class="credit">© <span id="year"></span> Vicente Barbearia · Desenvolvido por <a href="https://mesquitasaas.online/" target="_blank" rel="noopener">Mesquita SaaS</a></p>
