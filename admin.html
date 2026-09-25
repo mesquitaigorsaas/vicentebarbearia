@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Painel · Vicente Barbearia</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#16231f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2316231f'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' text-anchor='middle' fill='%23d4a23a'%3EV%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #16231f; --sage: #3e5a51; --sage-soft: #dfe7e2; --cream: #f4eee4; --paper: #fbf8f2; --line: #e3dccf; --text: #1d2521; --muted: #6b716c; --leather: #a45c2e; --red: #b8452a; --green: #2f7d57; --champagne: #e9dcc3; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--paper); color: var(--text); font: 15px/1.5 Manrope, system-ui, sans-serif; min-height: 100vh; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 0; background: none; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { width: min(1000px, 100% - 24px); margin-inline: auto; }
+  .serif { font-family: "Cormorant Garamond", serif; font-weight: 600; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 18px; border-radius: 999px; font-weight: 700; white-space: nowrap; }
+  .btn-leather { background: var(--leather); color: #fff; }
+  .btn-line { border: 1px solid var(--line); background: #fff; }
+  .btn-line:hover { border-color: var(--sage); }
+  .btn-sm { height: 34px; padding: 0 12px; font-size: 13px; }
+  input, select, textarea { width: 100%; padding: 11px 13px; border-radius: 12px; border: 1px solid var(--line); background: #fff; outline: none; }
+  input:focus, select:focus { border-color: var(--sage); }
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 18px; }
+  .muted { color: var(--muted); }
+  .hidden { display: none !important; }
+  .mark { display: inline-flex; flex-direction: column; line-height: 1; align-items: center; }
+  .mark img { height: 32px; width: auto; }
+  .mark b { font: 600 22px "Cormorant Garamond", serif; letter-spacing: .3em; }
+  .mark small { font-size: 9px; font-weight: 700; letter-spacing: .38em; margin-top: 4px; opacity: .7; }
+  .login { min-height: 100vh; display: grid; place-items: center; padding: 16px; background: var(--ink); }
+  .login .card { width: min(380px, 100%); text-align: center; padding: 30px 24px; }
+  .login form { display: grid; gap: 12px; text-align: left; margin-top: 22px; }
+  .msg { font-size: 14px; padding: 10px 12px; border-radius: 12px; background: #fbe9e3; color: #8a3a1f; }
+  header { position: sticky; top: 0; z-index: 10; background: rgba(251,248,242,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .top { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 10px; }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; }
+  .tab { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: #fff; font-weight: 600; font-size: 14px; white-space: nowrap; }
+  .tab.on { background: var(--ink); color: var(--champagne); border-color: var(--ink); }
+  main { padding: 20px 0 60px; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
+  .kpi b { display: block; font: 600 32px "Cormorant Garamond", serif; line-height: 1.1; }
+  .kpi span { font-size: 13px; color: var(--muted); }
+  .list { display: grid; gap: 10px; }
+  .appt { display: grid; grid-template-columns: 70px 1fr auto; gap: 14px; align-items: center; }
+  .appt .time { font: 600 26px "Cormorant Garamond", serif; line-height: 1; }
+  .appt .time small { display: block; font: 600 12px Manrope, sans-serif; color: var(--muted); margin-top: 4px; }
+  .appt h3 { font-size: 16px; }
+  .appt .svc { color: var(--muted); font-size: 14px; }
+  .appt .note { font-size: 13px; color: var(--leather); margin-top: 4px; }
+  .appt .acts { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .pro { background: var(--sage-soft); color: var(--sage); }
+  .st-confirmed { background: #f5ead9; color: var(--leather); }
+  .st-done { background: #dff0e6; color: var(--green); }
+  .st-no_show, .st-cancelled { background: #fbe9e3; color: var(--red); }
+  .appt.cancelled { opacity: .5; }
+  .block { border-style: dashed; background: var(--cream); }
+  .empty { text-align: center; padding: 34px 16px; color: var(--muted); border: 1px dashed var(--line); border-radius: 16px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 10px 6px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  th { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+  td input { padding: 8px 10px; }
+  .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--ink); color: var(--champagne); padding: 12px 18px; border-radius: 14px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,.3); z-index: 50; max-width: calc(100% - 32px); }
+  h2.section { font: 600 30px "Cormorant Garamond", serif; margin-bottom: 12px; }
+  @media (max-width: 640px) {
+    .appt { grid-template-columns: 58px 1fr; }
+    .appt .acts { grid-column: 1 / -1; justify-content: flex-start; }
+    .kpi b { font-size: 26px; }
+    .grid2 { grid-template-columns: 1fr; }
+    .hide-sm { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<section class="login" id="login">
+  <div class="card">
+    <span class="mark" style="color:var(--ink)"><img src="img/logo-vicente.png" alt="Vicente"><small>BARBEARIA · BURITIS</small></span>
+    <h1 class="serif" style="font-size:30px;margin-top:18px">Área da equipe</h1>
+    <p class="muted">Entre para ver a agenda.</p>
+    <form id="login-form">
+      <div><label for="l-email">E-mail</label><input id="l-email" type="email" autocomplete="username" required></div>
+      <div><label for="l-pass">Senha</label><input id="l-pass" type="password" autocomplete="current-password" required></div>
+      <div class="msg hidden" id="l-msg"></div>
+      <button class="btn btn-leather" id="l-btn">Entrar</button>
+      <a href="index.html" class="muted" style="text-align:center;font-size:14px">← Voltar ao site</a>
+    </form>
+  </div>
+</section>
+
+<div id="app" class="hidden">
+  <header>
+    <div class="wrap top">
+      <span class="mark"><img src="img/logo-vicente.png" alt="Vicente"><small>AGENDA DA EQUIPE</small></span>
+      <div class="row"><a href="index.html" class="btn btn-line btn-sm hide-sm" target="_blank">Ver site</a><button class="btn btn-line btn-sm" id="logout">Sair</button></div>
+    </div>
+    <nav class="wrap tabs">
+      <button class="tab on" data-tab="agenda">Agenda</button>
+      <button class="tab" data-tab="proximos">Próximos</button>
+      <button class="tab" data-tab="bloqueios">Bloquear horário</button>
+      <button class="tab" data-tab="equipe">Barbeiros</button>
+      <button class="tab" data-tab="servicos">Serviços e preços</button>
+      <button class="tab" data-tab="horarios">Horários</button>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section data-view="agenda">
+      <div class="row">
+        <button class="btn btn-line btn-sm" id="d-prev" aria-label="Dia anterior">←</button>
+        <input type="date" id="d-date" style="width:auto">
+        <button class="btn btn-line btn-sm" id="d-next" aria-label="Próximo dia">→</button>
+        <button class="btn btn-line btn-sm" id="d-today">Hoje</button>
+        <select id="d-pro" style="width:auto"></select>
+        <span class="muted" id="d-label"></span>
+      </div>
+      <div class="kpis">
+        <div class="card kpi"><b id="k-count">0</b><span>clientes</span></div>
+        <div class="card kpi"><b id="k-total">—</b><span>previsto (serviços com preço)</span></div>
+        <div class="card kpi"><b id="k-open">—</b><span>expediente</span></div>
+      </div>
+      <div class="list" id="day-list"></div>
+    </section>
+
+    <section data-view="proximos" class="hidden">
+      <h2 class="section">Próximos 14 dias</h2>
+      <div class="list" id="next-list"></div>
+    </section>
+
+    <section data-view="bloqueios" class="hidden">
+      <h2 class="section">Bloquear horário</h2>
+      <p class="muted" style="margin-bottom:14px">Almoço, folga, compromisso: o site deixa de oferecer esses horários.</p>
+      <form class="card" id="block-form" style="display:grid;gap:12px">
+        <div class="grid2">
+          <div><label for="b-date">Dia</label><input type="date" id="b-date" required></div>
+          <div><label for="b-pro">Quem</label><select id="b-pro"></select></div>
+        </div>
+        <div class="grid2">
+          <div><label for="b-from">Das</label><input type="time" id="b-from" value="12:00"></div>
+          <div><label for="b-to">Até</label><input type="time" id="b-to" value="13:00"></div>
+        </div>
+        <div><label for="b-reason">Motivo (só a equipe vê)</label><input id="b-reason" maxlength="80" placeholder="Ex.: almoço, folga"></div>
+        <label style="display:flex;gap:8px;align-items:center;color:var(--text)"><input type="checkbox" id="b-all" style="width:auto"> Dia inteiro</label>
+        <button class="btn btn-leather">Bloquear</button>
+      </form>
+      <h2 class="section" style="margin-top:26px">Bloqueios futuros</h2>
+      <div class="list" id="block-list"></div>
+    </section>
+
+    <section data-view="equipe" class="hidden">
+      <h2 class="section">Barbeiros</h2>
+      <p class="muted" style="margin-bottom:14px">Cada barbeiro tem a própria agenda. Com mais de um ativo, o cliente pode escolher (ou deixar "sem preferência").</p>
+      <div class="card" style="overflow-x:auto">
+        <table><thead><tr><th>Nome</th><th>Ordem</th><th>Ativo</th></tr></thead><tbody id="pro-body"></tbody></table>
+        <div class="row" style="margin-top:16px">
+          <input id="pro-new" placeholder="Nome do novo barbeiro" maxlength="40" style="flex:1;min-width:180px">
+          <button class="btn btn-line" id="pro-add">Adicionar</button>
+          <button class="btn btn-leather" id="pro-save">Salvar alterações</button>
+        </div>
+      </div>
+    </section>
+
+    <section data-view="servicos" class="hidden">
+      <h2 class="section">Serviços e preços</h2>
+      <div class="card" style="overflow-x:auto">
+        <table><thead><tr><th>Serviço</th><th>Preço (R$)</th><th>Minutos</th><th>Ativo</th></tr></thead><tbody id="svc-body"></tbody></table>
+        <button class="btn btn-leather" id="svc-save" style="margin-top:16px">Salvar alterações</button>
+      </div>
+      <p class="muted" style="margin-top:10px;font-size:13px">Preço em branco aparece como "Consulte" no site. "Minutos" é quanto tempo o horário fica ocupado.</p>
+    </section>
+
+    <section data-view="horarios" class="hidden">
+      <h2 class="section">Horário de atendimento</h2>
+      <div class="card" style="overflow-x:auto">
+        <table><thead><tr><th>Dia</th><th>Abre</th><th>Último atendimento termina</th><th>Fechado</th></tr></thead><tbody id="hours-body"></tbody></table>
+        <div class="grid2" style="margin-top:16px">
+          <div><label for="s-buffer">Intervalo entre clientes (min)</label><input type="number" id="s-buffer" min="0" max="60"></div>
+          <div><label for="s-step">Oferecer horários a cada (min)</label><input type="number" id="s-step" min="5" max="60" step="5"></div>
+          <div><label for="s-notice">Antecedência mínima (min)</label><input type="number" id="s-notice" min="0" max="1440"></div>
+          <div><label for="s-days">Agendar até quantos dias à frente</label><input type="number" id="s-days" min="1" max="90"></div>
+        </div>
+        <button class="btn btn-leather" id="hours-save" style="margin-top:16px">Salvar horários</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+(() => {
+  const C = window.VB_CONFIG;
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => [...document.querySelectorAll(s)];
+  const WEEK = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+  const pad = (n) => String(n).padStart(2, "0");
+  const money = (n) => "R$ " + Number(n).toFixed(2).replace(".", ",").replace(",00", "");
+  const TZ = "-03:00";
+  const local = (iso) => { const d = new Date(new Date(iso).getTime() - 3 * 3600e3); return { date: d.toISOString().slice(0, 10), time: `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}` }; };
+  const todayBR = () => new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10);
+  const addDays = (iso, n) => { const d = new Date(iso + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+  const dayLabel = (iso) => { const d = new Date(iso + "T12:00:00Z"); return `${WEEK[d.getUTCDay()]}, ${d.getUTCDate()}/${pad(d.getUTCMonth() + 1)}`; };
+  const fmtPhone = (p) => p.length === 11 ? `(${p.slice(0, 2)}) ${p.slice(2, 7)}-${p.slice(7)}` : p.length === 10 ? `(${p.slice(0, 2)}) ${p.slice(2, 6)}-${p.slice(6)}` : p;
+  const waNumber = (p) => (p.length <= 11 ? "55" + p : p);
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const STATUS = { confirmed: "Confirmado", done: "Atendido", no_show: "Faltou", cancelled: "Cancelado" };
+  const toast = (msg) => { const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.append(t); setTimeout(() => t.remove(), 2800); };
+
+  if (!C.supabaseUrl || !C.supabaseKey) {
+    $("#l-msg").textContent = "A agenda ainda não foi conectada ao banco de dados (config.js).";
+    $("#l-msg").classList.remove("hidden");
+    $("#l-btn").disabled = true;
+    return;
+  }
+  const sb = supabase.createClient(C.supabaseUrl, C.supabaseKey);
+
+  $("#login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    $("#l-btn").disabled = true;
+    const { error } = await sb.auth.signInWithPassword({ email: $("#l-email").value.trim(), password: $("#l-pass").value });
+    $("#l-btn").disabled = false;
+    if (error) { $("#l-msg").textContent = "E-mail ou senha incorretos."; $("#l-msg").classList.remove("hidden"); return; }
+    start();
+  });
+  $("#logout").addEventListener("click", async () => { await sb.auth.signOut(); location.reload(); });
+
+  async function start() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return;
+    const { data: isAdmin } = await sb.rpc("is_admin");
+    if (!isAdmin) {
+      $("#l-msg").textContent = "Esta conta não tem acesso à agenda.";
+      $("#l-msg").classList.remove("hidden");
+      await sb.auth.signOut();
+      return;
+    }
+    $("#login").classList.add("hidden");
+    $("#app").classList.remove("hidden");
+    $("#d-date").value = $("#b-date").value = todayBR();
+    await loadConfig();
+    renderDay();
+    setInterval(checkNew, 60_000);
+    if ("Notification" in window && Notification.permission === "default") Notification.requestPermission();
+  }
+
+  $$(".tab").forEach((t) => t.addEventListener("click", () => {
+    $$(".tab").forEach((x) => x.classList.toggle("on", x === t));
+    $$("[data-view]").forEach((v) => v.classList.toggle("hidden", v.dataset.view !== t.dataset.tab));
+    ({ agenda: renderDay, proximos: renderNext, bloqueios: renderBlocks, equipe: renderPros, servicos: renderServices, horarios: renderHours })[t.dataset.tab]();
+  }));
+
+  let services = [], hours = [], settings = {}, pros = [];
+  const proName = (id) => pros.find((p) => p.id === id)?.name ?? "—";
+  async function loadConfig() {
+    const [s, h, st, p] = await Promise.all([
+      sb.from("services").select("*").order("sort"),
+      sb.from("hours").select("*").order("weekday"),
+      sb.from("settings").select("*").single(),
+      sb.from("professionals").select("*").order("sort"),
+    ]);
+    services = s.data || []; hours = h.data || []; settings = st.data || {}; pros = p.data || [];
+    const opts = pros.filter((x) => x.active).map((x) => `<option value="${x.id}">${esc(x.name)}</option>`).join("");
+    const keep = $("#d-pro").value;
+    $("#d-pro").innerHTML = `<option value="">Todos os barbeiros</option>${opts}`;
+    $("#d-pro").value = keep;
+    $("#b-pro").innerHTML = `<option value="">A barbearia toda</option>${opts}`;
+  }
+
+  const range = (from, to) => [`${from}T00:00:00${TZ}`, `${to}T00:00:00${TZ}`];
+
+  function apptCard(b) {
+    const s = local(b.starts_at), e = local(b.ends_at);
+    const remind = `Olá, ${b.customer_name.split(" ")[0]}! Passando para lembrar do seu horário na Vicente Barbearia: ${b.services_label} com ${proName(b.professional_id)}, ${dayLabel(s.date)} às ${s.time}. Te esperamos!`;
+    return `<article class="card appt ${b.status}">
+      <div class="time">${s.time}<small>até ${e.time}</small></div>
+      <div>
+        <h3>${esc(b.customer_name)} <span class="pill st-${b.status}">${STATUS[b.status]}</span> <span class="pill pro">${esc(proName(b.professional_id))}</span></h3>
+        <div class="svc">${esc(b.services_label)}${b.total !== null ? " · " + money(b.total) : ""} · ${fmtPhone(b.customer_phone)}</div>
+        ${b.notes ? `<div class="note">“${esc(b.notes)}”</div>` : ""}
+        ${b.status === "cancelled" && b.cancelled_by ? `<div class="svc">Cancelado por: ${b.cancelled_by}</div>` : ""}
+      </div>
+      <div class="acts">
+        <a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/${waNumber(b.customer_phone)}?text=${encodeURIComponent(remind)}">Lembrar no WhatsApp</a>
+        ${b.status === "confirmed" ? `
+          <button class="btn btn-line btn-sm" data-st="done" data-id="${b.id}">Atendido</button>
+          <button class="btn btn-line btn-sm" data-st="no_show" data-id="${b.id}">Faltou</button>
+          <button class="btn btn-line btn-sm" data-st="cancelled" data-id="${b.id}">Cancelar</button>` :
+          `<button class="btn btn-line btn-sm" data-st="confirmed" data-id="${b.id}">Desfazer</button>`}
+      </div>
+    </article>`;
+  }
+
+  function bindStatus(root, rerender) {
+    root.querySelectorAll("[data-st]").forEach((btn) => btn.addEventListener("click", async () => {
+      const st = btn.dataset.st;
+      if (st === "cancelled" && !confirm("Cancelar este agendamento? O horário volta a ficar livre no site.")) return;
+      const { error } = await sb.from("bookings").update({ status: st, cancelled_by: st === "cancelled" ? "barbearia" : null }).eq("id", btn.dataset.id);
+      if (error) toast(/overlap|exclu/i.test(error.message) ? "Esse horário já foi ocupado por outro cliente." : "Não foi possível salvar.");
+      rerender();
+    }));
+  }
+
+  async function renderDay() {
+    const d = $("#d-date").value || todayBR();
+    const pro = $("#d-pro").value ? Number($("#d-pro").value) : null;
+    $("#d-label").textContent = dayLabel(d);
+    const [from, to] = range(d, addDays(d, 1));
+    let q = sb.from("bookings").select("*").gte("starts_at", from).lt("starts_at", to).order("starts_at");
+    if (pro) q = q.eq("professional_id", pro);
+    const [{ data: bookings }, { data: blocks }] = await Promise.all([q, sb.from("blocks").select("*").lt("starts_at", to).gt("ends_at", from).order("starts_at")]);
+    const active = (bookings || []).filter((b) => b.status !== "cancelled");
+    $("#k-count").textContent = active.length;
+    const priced = active.filter((b) => b.status !== "no_show" && b.total !== null);
+    $("#k-total").textContent = priced.length ? money(priced.reduce((a, b) => a + Number(b.total), 0)) : "—";
+    const h = hours.find((x) => x.weekday === new Date(d + "T12:00:00Z").getUTCDay());
+    $("#k-open").textContent = h && !h.closed ? `${h.opens.slice(0, 5)}–${h.closes.slice(0, 5)}` : "Fechado";
+    const blk = (blocks || []).filter((k) => !pro || k.professional_id === null || k.professional_id === pro);
+    const items = [
+      ...(bookings || []).map((b) => ({ at: b.starts_at, html: apptCard(b) })),
+      ...blk.map((k) => ({ at: k.starts_at, html: `<article class="card appt block"><div class="time">${local(k.starts_at).time}<small>até ${local(k.ends_at).time}</small></div><div><h3>Bloqueado · ${k.professional_id ? esc(proName(k.professional_id)) : "barbearia toda"}</h3><div class="svc">${esc(k.reason) || "Horário bloqueado"}</div></div><div class="acts"><button class="btn btn-line btn-sm" data-unblock="${k.id}">Desbloquear</button></div></article>` })),
+    ].sort((a, b) => a.at.localeCompare(b.at));
+    $("#day-list").innerHTML = items.length ? items.map((i) => i.html).join("") : '<div class="empty">Nenhum agendamento neste dia.</div>';
+    bindStatus($("#day-list"), renderDay);
+    $$("#day-list [data-unblock]").forEach((b) => b.addEventListener("click", () => unblock(b.dataset.unblock, renderDay)));
+  }
+  $("#d-date").addEventListener("change", renderDay);
+  $("#d-pro").addEventListener("change", renderDay);
+  $("#d-prev").addEventListener("click", () => { $("#d-date").value = addDays($("#d-date").value, -1); renderDay(); });
+  $("#d-next").addEventListener("click", () => { $("#d-date").value = addDays($("#d-date").value, 1); renderDay(); });
+  $("#d-today").addEventListener("click", () => { $("#d-date").value = todayBR(); renderDay(); });
+
+  async function renderNext() {
+    const t = todayBR();
+    const [from, to] = range(t, addDays(t, 15));
+    const { data } = await sb.from("bookings").select("*").gte("starts_at", from).lt("starts_at", to).eq("status", "confirmed").order("starts_at");
+    if (!data?.length) { $("#next-list").innerHTML = '<div class="empty">Nenhum agendamento nos próximos dias.</div>'; return; }
+    let html = "", last = "";
+    for (const b of data) {
+      const d = local(b.starts_at).date;
+      if (d !== last) { html += `<h3 class="serif" style="font-size:24px;margin-top:10px">${dayLabel(d)}</h3>`; last = d; }
+      html += apptCard(b);
+    }
+    $("#next-list").innerHTML = html;
+    bindStatus($("#next-list"), renderNext);
+  }
+
+  let lastSeen = new Date().toISOString();
+  async function checkNew() {
+    const { data } = await sb.from("bookings").select("customer_name, services_label, starts_at, created_at, professional_id").gt("created_at", lastSeen).order("created_at");
+    if (!data?.length) return;
+    lastSeen = data[data.length - 1].created_at;
+    for (const b of data) {
+      const s = local(b.starts_at);
+      const text = `${b.customer_name} · ${b.services_label} com ${proName(b.professional_id)} · ${dayLabel(s.date)} às ${s.time}`;
+      toast("Novo agendamento: " + text);
+      if ("Notification" in window && Notification.permission === "granted") new Notification("Novo agendamento", { body: text });
+    }
+    if (!$("[data-view=agenda]").classList.contains("hidden")) renderDay();
+  }
+
+  $("#b-all").addEventListener("change", () => { $("#b-from").disabled = $("#b-to").disabled = $("#b-all").checked; });
+  $("#block-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const d = $("#b-date").value, all = $("#b-all").checked;
+    const pro = $("#b-pro").value ? Number($("#b-pro").value) : null;
+    const from = all ? `${d}T00:00:00${TZ}` : `${d}T${$("#b-from").value}:00${TZ}`;
+    const to = all ? `${addDays(d, 1)}T00:00:00${TZ}` : `${d}T${$("#b-to").value}:00${TZ}`;
+    if (Date.parse(to) <= Date.parse(from)) return toast("O horário final precisa ser depois do inicial.");
+    let q = sb.from("bookings").select("id", { count: "exact", head: true }).eq("status", "confirmed").lt("starts_at", to).gt("ends_at", from);
+    if (pro) q = q.eq("professional_id", pro);
+    const { count } = await q;
+    if (count && !confirm(`Já existem ${count} cliente(s) agendado(s) nesse período. Bloquear mesmo assim? (Os agendamentos continuam; avise os clientes.)`)) return;
+    const { error } = await sb.from("blocks").insert({ starts_at: from, ends_at: to, professional_id: pro, reason: $("#b-reason").value.trim() });
+    if (error) return toast("Não foi possível bloquear.");
+    toast("Horário bloqueado.");
+    $("#b-reason").value = "";
+    renderBlocks();
+  });
+
+  async function unblock(id, rerender) {
+    if (!confirm("Liberar este horário no site?")) return;
+    await sb.from("blocks").delete().eq("id", id);
+    rerender();
+  }
+
+  async function renderBlocks() {
+    const { data } = await sb.from("blocks").select("*").gt("ends_at", new Date().toISOString()).order("starts_at");
+    $("#block-list").innerHTML = data?.length ? data.map((k) => {
+      const s = local(k.starts_at), e = local(k.ends_at);
+      const whole = s.time === "00:00" && e.time === "00:00";
+      return `<article class="card row" style="justify-content:space-between"><div><b>${dayLabel(s.date)}</b> · ${whole ? "dia inteiro" : `${s.time} às ${e.time}`} · ${k.professional_id ? esc(proName(k.professional_id)) : "barbearia toda"}<div class="muted">${esc(k.reason)}</div></div><button class="btn btn-line btn-sm" data-unblock="${k.id}">Desbloquear</button></article>`;
+    }).join("") : '<div class="empty">Nenhum bloqueio futuro.</div>';
+    $$("#block-list [data-unblock]").forEach((b) => b.addEventListener("click", () => unblock(b.dataset.unblock, renderBlocks)));
+  }
+
+  function renderPros() {
+    $("#pro-body").innerHTML = pros.map((p) => `<tr data-id="${p.id}">
+      <td><input value="${esc(p.name)}" data-f="name" maxlength="40"></td>
+      <td style="width:90px"><input type="number" value="${p.sort}" data-f="sort"></td>
+      <td style="width:60px"><input type="checkbox" ${p.active ? "checked" : ""} data-f="active" style="width:auto"></td></tr>`).join("");
+  }
+  $("#pro-add").addEventListener("click", async () => {
+    const name = $("#pro-new").value.trim();
+    if (name.length < 2) return toast("Digite o nome do barbeiro.");
+    const { error } = await sb.from("professionals").insert({ name, sort: pros.length + 1 });
+    if (error) return toast("Não foi possível adicionar.");
+    $("#pro-new").value = "";
+    await loadConfig(); renderPros(); toast(`${name} adicionado.`);
+  });
+  $("#pro-save").addEventListener("click", async () => {
+    const rows = $$("#pro-body tr").map((tr) => ({
+      id: Number(tr.dataset.id),
+      name: tr.querySelector('[data-f="name"]').value.trim(),
+      sort: Number(tr.querySelector('[data-f="sort"]').value),
+      active: tr.querySelector('[data-f="active"]').checked,
+    }));
+    if (!rows.some((r) => r.active)) return toast("Deixe pelo menos um barbeiro ativo.");
+    const res = await Promise.all(rows.map((r) => sb.from("professionals").update(r).eq("id", r.id)));
+    if (res.some((r) => r.error)) return toast("Algum nome é inválido.");
+    await loadConfig(); renderPros(); toast("Equipe salva. O site já mostra as mudanças.");
+  });
+
+  function renderServices() {
+    $("#svc-body").innerHTML = services.map((s) => `<tr data-id="${s.id}">
+      <td><b>${esc(s.name)}</b><div class="muted" style="font-size:12px">${s.kind === "main" ? "Principal" : "Adicional"}</div></td>
+      <td style="width:120px"><input type="number" min="0" step="0.5" value="${s.price ?? ""}" placeholder="Consulte" data-f="price"></td>
+      <td style="width:100px"><input type="number" min="5" max="240" step="5" value="${s.duration_min}" data-f="duration_min"></td>
+      <td style="width:60px"><input type="checkbox" ${s.active ? "checked" : ""} data-f="active" style="width:auto"></td></tr>`).join("");
+  }
+  $("#svc-save").addEventListener("click", async () => {
+    const rows = $$("#svc-body tr").map((tr) => {
+      const price = tr.querySelector('[data-f="price"]').value;
+      return {
+        id: Number(tr.dataset.id),
+        price: price === "" ? null : Number(price),
+        duration_min: Number(tr.querySelector('[data-f="duration_min"]').value),
+        active: tr.querySelector('[data-f="active"]').checked,
+      };
+    });
+    const res = await Promise.all(rows.map((r) => sb.from("services").update(r).eq("id", r.id)));
+    if (res.some((r) => r.error)) return toast("Algum valor é inválido. Confira e tente de novo.");
+    await loadConfig(); renderServices(); toast("Serviços salvos. O site já mostra os novos valores.");
+  });
+
+  function renderHours() {
+    $("#hours-body").innerHTML = [1, 2, 3, 4, 5, 6, 0].map((d) => {
+      const h = hours.find((x) => x.weekday === d);
+      return `<tr data-wd="${d}"><td><b>${WEEK[d]}</b></td>
+        <td><input type="time" value="${h.opens.slice(0, 5)}" data-f="opens"></td>
+        <td><input type="time" value="${h.closes.slice(0, 5)}" data-f="closes"></td>
+        <td><input type="checkbox" ${h.closed ? "checked" : ""} data-f="closed" style="width:auto"></td></tr>`;
+    }).join("");
+    $("#s-buffer").value = settings.buffer_min; $("#s-step").value = settings.slot_step_min;
+    $("#s-notice").value = settings.min_notice_min; $("#s-days").value = settings.max_days;
+  }
+  $("#hours-save").addEventListener("click", async () => {
+    const rows = $$("#hours-body tr").map((tr) => ({
+      weekday: Number(tr.dataset.wd),
+      opens: tr.querySelector('[data-f="opens"]').value,
+      closes: tr.querySelector('[data-f="closes"]').value,
+      closed: tr.querySelector('[data-f="closed"]').checked,
+    }));
+    const st = { id: 1, buffer_min: Number($("#s-buffer").value), slot_step_min: Number($("#s-step").value), min_notice_min: Number($("#s-notice").value), max_days: Number($("#s-days").value) };
+    const [a, b] = await Promise.all([sb.from("hours").upsert(rows), sb.from("settings").upsert(st)]);
+    if (a.error || b.error) return toast("Não foi possível salvar. Confira os valores.");
+    await loadConfig(); renderHours(); toast("Horários salvos.");
+  });
+
+  start();
+})();
+</script>
+</body>
+</html>
