@@ -122,6 +122,7 @@
   .choice { text-align: left; padding: 16px 18px; border-radius: 16px; border: 1.5px solid var(--line); background: #fff; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: .15s; }
   .choice:hover { border-color: var(--sage-2); }
   .choice.sel { border-color: var(--sage); background: var(--sage-soft); }
+  .choice.sel b::before { content: "✓ "; color: var(--sage); }
   .choice b { display: block; font-size: 15.5px; }
   .choice small { color: var(--muted); font-size: 13px; }
   .choice .p { font-weight: 800; white-space: nowrap; font-size: 14px; }
@@ -355,7 +356,7 @@
 
           <div class="step active" data-step="1">
             <h3>Qual serviço?</h3>
-            <p class="hint">Escolha um serviço principal e, se quiser, um adicional.</p>
+            <p class="hint">Escolha um ou mais serviços — ex.: corte + barboterapia. O tempo é somado automaticamente.</p>
             <div class="choices" id="main-choices"></div>
             <div id="extras-wrap"><p class="sub">Adicional (opcional)</p><div class="chips" id="extra-choices"></div></div>
             <div class="actions"><span></span><button class="btn btn-leather" id="to-2" disabled>Escolher horário →</button></div>
@@ -597,7 +598,8 @@
         ${s.kind === "main" ? `<button data-pick="${s.id}">Agendar</button>` : ""}
       </article>`).join("");
     $$("[data-pick]").forEach((b) => b.addEventListener("click", () => {
-      state.main = Number(b.dataset.pick);
+      state.mains = new Set([Number(b.dataset.pick)]);
+      state.start = null;
       renderChoices();
       goStep(1);
       $("#agendar").scrollIntoView({ behavior: "smooth" });
@@ -633,8 +635,8 @@
   }
 
   /* ---------- Agendamento ---------- */
-  const state = { main: null, extras: new Set(), pro: null, date: null, start: null };
-  const selected = () => services.filter((s) => s.id === state.main || state.extras.has(s.id));
+  const state = { mains: new Set(), extras: new Set(), pro: null, date: null, start: null };
+  const selected = () => services.filter((s) => state.mains.has(s.id) || state.extras.has(s.id));
   const duration = () => selected().reduce((a, s) => a + s.duration_min, 0);
   const totalLabel = () => {
     const sel = selected();
@@ -647,19 +649,24 @@
     const mains = services.filter((s) => s.kind === "main");
     const extras = services.filter((s) => s.kind === "extra");
     $("#main-choices").innerHTML = mains.map((s) => `
-      <button class="choice ${state.main === s.id ? "sel" : ""}" data-main="${s.id}">
+      <button class="choice ${state.mains.has(s.id) ? "sel" : ""}" data-main="${s.id}" aria-pressed="${state.mains.has(s.id)}">
         <span><b>${esc(s.name)}</b><small>${s.duration_min} min</small></span><span class="p ${hasPrice(s) ? "" : "ask"}">${priceLabel(s)}</span>
       </button>`).join("");
     $("#extras-wrap").style.display = extras.length ? "" : "none";
     $("#extra-choices").innerHTML = extras.map((s) => `<button class="chip ${state.extras.has(s.id) ? "sel" : ""}" data-extra="${s.id}">${esc(s.name)} · ${priceLabel(s)}</button>`).join("");
-    $$("[data-main]").forEach((b) => b.addEventListener("click", () => { state.main = Number(b.dataset.main); state.start = null; renderChoices(); }));
+    $$("[data-main]").forEach((b) => b.addEventListener("click", () => {
+      const id = Number(b.dataset.main);
+      state.mains.has(id) ? state.mains.delete(id) : state.mains.add(id);
+      state.start = null;
+      renderChoices();
+    }));
     $$("[data-extra]").forEach((b) => b.addEventListener("click", () => {
       const id = Number(b.dataset.extra);
       state.extras.has(id) ? state.extras.delete(id) : state.extras.add(id);
       state.start = null;
       renderChoices();
     }));
-    $("#to-2").disabled = !state.main;
+    $("#to-2").disabled = !state.mains.size;
     renderSummary();
   }
 
@@ -809,7 +816,7 @@
     $$(".steps li").forEach((li) => li.classList.add("on"));
   }
 
-  $("#again").addEventListener("click", () => { Object.assign(state, { main: null, pro: null, date: null, start: null }); state.extras.clear(); renderChoices(); goStep(1); });
+  $("#again").addEventListener("click", () => { Object.assign(state, { pro: null, date: null, start: null }); state.mains.clear(); state.extras.clear(); renderChoices(); goStep(1); });
   $("#to-2").addEventListener("click", () => goStep(2));
   $("#to-3").addEventListener("click", () => goStep(3));
   $$("[data-back]").forEach((b) => b.addEventListener("click", () => goStep(Number(b.closest(".step").dataset.step) - 1)));

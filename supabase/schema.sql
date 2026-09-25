@@ -198,8 +198,8 @@ begin
          string_agg(s.name, ' + ' order by s.sort), sum(s.price)
     into n_found, n_main, n_price, dur, lbl, tot
     from public.services s where s.id = any (p_service_ids) and s.active;
-  if n_main <> 1 or n_found <> cardinality(p_service_ids) then
-    raise exception 'Escolha um serviço principal.' using errcode = 'P0001';
+  if n_main < 1 or n_found <> cardinality(p_service_ids) then
+    raise exception 'Escolha pelo menos um serviço.' using errcode = 'P0001';
   end if;
   if n_price < n_found then tot := null; end if;
 
